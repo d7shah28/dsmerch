@@ -4,7 +4,7 @@ class RegisterForm(forms.Form):
     username = forms.CharField(
             widget=forms.TextInput(
                 attrs={
-                    "class": "form-control",
+                    "class": "form-control my-2",
                     "placeholder": "Your username"
                 }
             )
@@ -12,7 +12,7 @@ class RegisterForm(forms.Form):
     email = forms.EmailField(
             widget=forms.EmailInput(
                 attrs={
-                    "class": "form-control",
+                    "class": "form-control my-2",
                     "placeholder": "Your email"
                 }
             )
@@ -20,14 +20,14 @@ class RegisterForm(forms.Form):
     password = forms.CharField(
             widget=forms.PasswordInput(
                 attrs={
-                    "class": "form-control",
+                    "class": "form-control my-2",
                     "placeholder": "Enter password..."
                 }
             ))
     password2 = forms.CharField(label="Confirm Password", 
             widget=forms.PasswordInput(
                 attrs={
-                    "class": "form-control",
+                    "class": "form-control my-2",
                     "placeholder": "Confirm password..."
                 }
     ))
@@ -42,6 +42,27 @@ class RegisterForm(forms.Form):
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField()
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "class":"form-control my-2",
+                "placeholder": "Your Username"
+            }
+        )
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                "class":"form-control my-2",
+                "placeholder":"Your email"
+            }
+        )
+    )
+    password = forms.CharField(label="Password",
+        widget=forms.PasswordInput(
+            attrs={
+                "class":"form-control my-2",
+                "placeholder":"Password"
+            }
+        )
+    )

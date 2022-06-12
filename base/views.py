@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 
 from .forms import RegisterForm, LoginForm
+from .models import Product
 
 def test_page(request):
 
@@ -46,5 +47,13 @@ def login_page(request):
     return render(request, 'auth/login.html', context)
 
 
-# TODO Register,Login, Logout basic styling, Show products
-    
+def products_list(request):
+    queryset = Product.objects.all()
+    context = {
+        'object_list': queryset
+    }
+    return render(request, 'pages/product_list.html', context)
+
+# TODO INDIVIDUAL PRODUCT PAGE
+# TODO ONCE LOGIN, LOGOUT SHOULD APPEAR
+# TODO LOGIN, REGISTER BORDER WITH SHADOW
