@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
 from .forms import RegisterForm, LoginForm
@@ -41,19 +41,23 @@ def login_page(request):
         user = authenticate(username=username, email=email, password=password)
 
         if user:
+            login(request, user)
             return redirect('/')
     else:
         print("ERROR")
     return render(request, 'auth/login.html', context)
 
+def logout_page(request):
+    pass
+
 
 def products_list(request):
     queryset = Product.objects.all()
+    print(f"HIT HIT {request.user.is_authenticated}")
     context = {
         'object_list': queryset
     }
     return render(request, 'pages/product_list.html', context)
 
 # TODO INDIVIDUAL PRODUCT PAGE
-# TODO ONCE LOGIN, LOGOUT SHOULD APPEAR
 # TODO LOGIN, REGISTER BORDER WITH SHADOW
