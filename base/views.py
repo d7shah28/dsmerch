@@ -1,5 +1,6 @@
+from math import prod
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
 from .forms import RegisterForm, LoginForm
@@ -48,8 +49,13 @@ def login_page(request):
     return render(request, 'auth/login.html', context)
 
 def logout_page(request):
-    pass
+    # user = request.user
 
+    # if user: 
+    #     logout(request)
+
+    # return render(request, '')
+    pass
 
 def products_list(request):
     queryset = Product.objects.all()
@@ -57,7 +63,18 @@ def products_list(request):
     context = {
         'object_list': queryset
     }
-    return render(request, 'pages/product_list.html', context)
+    return render(request, 'pages/products_list.html', context)
+
+
+def product_detail(request, pk):
+    product = Product.objects.get(_id=pk)
+
+    context = {
+        "object": product
+    }
+
+    return render(request, 'pages/product_detail.html', context)
 
 # TODO INDIVIDUAL PRODUCT PAGE
 # TODO LOGIN, REGISTER BORDER WITH SHADOW
+# CARD-BODY REDUCE PADDING
