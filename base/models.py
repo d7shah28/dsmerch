@@ -51,7 +51,7 @@ class Order(models.Model):
     NOT_DISPATCHED = 'NOT_DISPATCHED'
     DISPATCHED = 'DISPATCHED'
     OTW = 'OTW'
-    DELIVERED = 'DELIVEREDE'
+    DELIVERED = 'DELIVERED'
     TYPE_OF_DELIVERY_STATUS = [
         (NOT_DISPATCHED, 'Not Dispatched'),
         (DISPATCHED, 'Dispatched'),
