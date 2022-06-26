@@ -15,17 +15,29 @@
                 <li class="list-group-item">{{ object.num_reviews }}</li>
                 <li class="list-group-item">Price: ₹{{ object.price }}</li>
                 <li class="list-group-item">{{ object.description }}</li>
-              </ul>
+            </ul>
         </div>
         <div class="col-md-3">
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Price: ₹{{ object.price }}</li>
                 <li class="list-group-item">{{ object.count_in_stock }}</li>
-                <li class="list-group-item">Quantity: </li>
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col">Quantity:</div>
+                        <div class="col">
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>--select--</option>
+                                {% for stock in countInStock %}
+                                    <option value="{{stock}}">{{stock}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </li>
                 <li class="list-group-item d-grid gap-2">
                     <button class="btn btn-success">Add to Cart</button>
                 </li>
-              </ul>
+            </ul>
         </div>
     </div>
     <div class="row">

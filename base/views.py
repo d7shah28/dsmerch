@@ -49,13 +49,12 @@ def login_page(request):
     return render(request, 'auth/login.html', context)
 
 def logout_page(request):
-    # user = request.user
+    user = request.user
+    if user:
+        print("HI") 
+        logout(request)
+        return redirect('/')
 
-    # if user: 
-    #     logout(request)
-
-    # return render(request, '')
-    pass
 
 def products_list(request):
     queryset = Product.objects.all()
@@ -68,9 +67,10 @@ def products_list(request):
 
 def product_detail(request, pk):
     product = Product.objects.get(_id=pk)
-
+    countInStock = range(1, product.count_in_stock + 1)
     context = {
-        "object": product
+        "object": product,
+        "countInStock": countInStock
     }
 
     return render(request, 'pages/product_detail.html', context)
