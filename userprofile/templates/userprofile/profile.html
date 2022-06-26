@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-3">
+        <h2>Hello {{ user.username }}!</h2>
+        <div class="row">
+            <div class="col">
+                <form method="POST">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        {{ u_form }}
+                    </fieldset>
+                    <div class="text-center">
+                        <button class="btn btn-outline-success" type="submit">Update</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col">
+                Shipping Addresses
+            </div>
+        </div>
+
+    </div>
+{% endblock content %}
+
+
+{% comment %} username, email, password, first_name, last_name, shipping_address {% endcomment %}
