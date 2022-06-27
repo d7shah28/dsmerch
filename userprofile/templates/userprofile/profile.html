@@ -1,10 +1,19 @@
 {% extends 'base.html' %}
 
+{% block title %}User Profile{% endblock title %}
+
 {% block content %}
     <div class="container mt-3">
         <h2>Hello {{ user.username }}!</h2>
         <div class="row">
             <div class="col">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
                 <form method="POST">
                     {% csrf_token %}
                     <fieldset class="form-group">
@@ -23,5 +32,3 @@
     </div>
 {% endblock content %}
 
-
-{% comment %} username, email, password, first_name, last_name, shipping_address {% endcomment %}
