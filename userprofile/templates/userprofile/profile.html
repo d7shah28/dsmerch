@@ -3,32 +3,68 @@
 {% block title %}User Profile{% endblock title %}
 
 {% block content %}
-    <div class="container mt-3">
-        <h2>Hello {{ user.username }}!</h2>
-        <div class="row">
-            <div class="col">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-                <form method="POST">
-                    {% csrf_token %}
-                    <fieldset class="form-group">
-                        {{ u_form }}
-                    </fieldset>
-                    <div class="text-center">
-                        <button class="btn btn-outline-success" type="submit">Update</button>
-                    </div>
-                </form>
+<div class="container mt-3">
+    <h2>Hello {{ user.username }}!</h2>
+    <div class="row">
+        <div class="col">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
             </div>
-            <div class="col">
-                Shipping Addresses
-            </div>
+            {% endfor %}
+            {% endif %}
+            <form method="POST">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    {{ u_form }}
+                </fieldset>
+                <div class="text-center">
+                    <button class="btn btn-outline-success" type="submit">Update</button>
+                </div>
+            </form>
         </div>
-
+        <div class="col">
+            Shipping Addresses
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row text-success">
+                            Default Address
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ default_add.name }}</h5>
+                        <p class="card-text">{{ default_add.contact_number }}</p>
+                        <p class="card-text">{{ default_add.address_line_1}}; {{ default_add.address_line_2}}</p>
+                        <p class="card-text">{{ default_add.city}}, {{ default_add.state}}, {{ default_add.pincode}},
+                            {{ default_add.country.name}}</p>
+                        <a href="{% url 'edit_address' default_add.pk %}" class="">Edit</a>
+                        <a href="#" class="">Remove</a>
+                    </div>
+                </div>
+            </div>
+            {% for address in other_add %}
+                <div class="row mt-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row text-secondary">
+                                Address {{ forloop.counter }}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ address.name }}</h5>
+                            <p class="card-text">{{ address.contact_number }}</p>
+                            <p class="card-text">{{ address.address_line_1}}; {{ address.address_line_2}}</p>
+                            <p class="card-text">{{ address.city}}, {{ address.state}}, {{ address.pincode}},
+                                {{ address.country.name}}</p>
+                            <a href="{% url 'edit_address' address.pk %}" class="">Edit</a>
+                            <a href="#" class="">Remove</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
+</div>
 {% endblock content %}
-

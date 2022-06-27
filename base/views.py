@@ -67,7 +67,6 @@ def logout_page(request):
 
 def products_list(request):
     queryset = Product.objects.all()
-    print(f"HIT HIT {request.user.is_authenticated}")
     context = {
         'object_list': queryset
     }
@@ -84,4 +83,15 @@ def product_detail(request, pk):
 
     return render(request, 'pages/product_detail.html', context)
 
+
+def staff_products_list(request):
+    queryset = Product.objects.all()
+    context = {
+        'object_list': queryset
+    }
+    return render(request, 'staff/staff_products_list.html', context)
+
+
 # CARD-BODY REDUCE PADDING
+# STYLING OF EDIT ADDRESS PAGE
+# Update Password change
