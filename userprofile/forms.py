@@ -1,6 +1,3 @@
-from dataclasses import field
-from email.policy import default
-from turtle import width
 from django import forms
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -10,13 +7,6 @@ from userprofile.models import ShippingAddress
 
 
 class ProfileForm(forms.ModelForm):
-    username = forms.CharField(label='Username',
-        widget=forms.TextInput(
-            attrs={
-                "class":"form-control my-2"
-            }
-        )
-    )
     email = forms.EmailField(label='Email',
         widget=forms.EmailInput(
             attrs={
@@ -43,32 +33,13 @@ class ProfileForm(forms.ModelForm):
             }
         )
     )
-    password = forms.CharField(required=False,
-            widget=forms.PasswordInput(
-                attrs={
-                    "class": "form-control my-2",
-                    "placeholder": "Enter password..."
-            }
-        )
-    )
-    password2 = forms.CharField(label="Confirm Password",
-            required=False, 
-            widget=forms.PasswordInput(
-                attrs={
-                    "class": "form-control my-2",
-                    "placeholder": "Confirm password..."
-            }
-        )
-    )
+
     class Meta:
         model = User
         fields = [
-            'username',
             'email',
             'first_name',
             'last_name',
-            'password',
-            'password2',
         ]
 
     def clean(self):
@@ -85,10 +56,6 @@ class ProfileForm(forms.ModelForm):
         user.email = self.cleaned_data.get("email")
         user.first_name = self.cleaned_data.get("first_name")
         user.last_name = self.cleaned_data.get("last_name")
-        print("Password is ", self.cleaned_data.get('password'), "current password ", user.password)
-        if self.cleaned_data.get("password") != "" or self.cleaned_data.get("password") is not None:
-            print("HIT")
-            user.set_password(self.cleaned_data.get("password"))
         user.save()
         return user
 

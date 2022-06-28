@@ -23,6 +23,10 @@
                     <button class="btn btn-outline-success" type="submit">Update</button>
                 </div>
             </form>
+            <ul class="list-group list-group-flush mt-2">
+                <li class="list-group-item">Username: {{ user.username }}</li>
+                <li class="list-group-item">Change Password: <a href="{% url 'change_password' %}" class="btn btn-sm btn-dark mx-2">Change</a></li>
+            </ul>
         </div>
         <div class="col">
             <div class="row mb-2">
@@ -37,7 +41,7 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
-                            <div class="row text-success">
+                            <div class="row text-success px-2">
                                 Default Address
                             </div>
                         </div>
@@ -58,7 +62,7 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
-                            <div class="row text-secondary">
+                            <div class="row text-secondary px-2">
                                 Address {{ forloop.counter }}
                             </div>
                         </div>

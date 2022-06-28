@@ -1,5 +1,8 @@
-from multiprocessing import context
+from email import message
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 
 from .forms import (
@@ -9,6 +12,8 @@ from .forms import (
 from base.forms import DivErrorList
 from userprofile.models import ShippingAddress
 
+
+@login_required
 def profile_page(request):
     user = request.user
     print(f"Current user {user}")
@@ -21,10 +26,6 @@ def profile_page(request):
         print(u_form)
         if u_form.is_valid():
             u_form.save()
-            if u_form.cleaned_data.get('password') != "":
-                # user.set_password(u_form.cleaned_data.get('password'))
-                # user.save()
-                return redirect('login')
             messages.success(request, f'Successfully updated your information')
             return redirect('profile')
     else:
@@ -40,6 +41,27 @@ def profile_page(request):
     return render(request, 'userprofile/profile.html', context)
 
 
+@login_required
+def change_password(request):
+    user = request.user
+    if request.method == 'POST':
+        form = PasswordChangeForm(user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, f'Successfully updated your password')
+            return redirect('profile')
+        else:
+            messages.error(request, f'Please correct the error below')
+    else:
+        form = PasswordChangeForm(user)
+    context = {
+        'form': form
+    }
+    return render(request, 'auth/password_change.html', context)
+
+
+@login_required
 def create_address(request):
     user = request.user
     if request.method == 'POST':
@@ -60,6 +82,7 @@ def create_address(request):
     return render(request, 'userprofile/create_address.html', context)
 
 
+@login_required
 def edit_address(request, pk):
     user=request.user
     address = ShippingAddress.objects.get(user=user, pk=pk)
@@ -81,6 +104,7 @@ def edit_address(request, pk):
     return render(request, 'userprofile/edit_address.html', context)
 
 
+@login_required
 def make_default_address(request, pk):
     user = request.user
     curr_default_address = ShippingAddress.objects.get(default=True)
@@ -92,6 +116,8 @@ def make_default_address(request, pk):
     new_default_address.save()
     return redirect('profile')
 
+
+@login_required
 def remove_address(request, pk):
     user = request.user
     address = ShippingAddress.objects.get(pk=pk)

@@ -9,7 +9,8 @@
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;1,100;1,200;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" 
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;1,100;1,200;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'flags/sprite.css' %}">
@@ -33,26 +34,28 @@
                     <li class="nav-item">
                         <a class="nav-link active text-white" aria-current="page" href="{% url 'home' %}">Home</a>
                     </li>
+                    {% if user.is_staff is False %}
                     <li class="nav-item">
                         <a class="nav-link text-white" href="#">Cart</a>
                     </li>
+                    {% endif %}
                     {% if user.is_authenticated %}
-                        {% if user.is_staff %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Admin
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{% url 'staff-products-view' %}">Products</a></li>
-                                <li><a class="dropdown-item" href="#">Users</a></li>
-                            </ul>
-                        </li>
-                        {% else %}
-                            <li class="nav-item">
-                                <a class="nav-link text-white" href="{% url 'profile' %}">{{ user.username }}</a>
-                            </li>
-                        {% endif %}
+                    {% if user.is_staff %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Admin
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'staff-products-view' %}">Products</a></li>
+                            <li><a class="dropdown-item" href="#">Users</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'profile' %}">{{ user.username }}</a>
+                    </li>
+                    {% endif %}
                     {% endif %}
 
                 </ul>
