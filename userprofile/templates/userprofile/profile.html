@@ -25,27 +25,37 @@
             </form>
         </div>
         <div class="col">
-            Shipping Addresses
+            <div class="row mb-2">
+                <div class="col">
+                    Shipping Addresses
+                </div>
+                <div class="col text-end">
+                    <a href="{% url 'create_address' %}" class="btn btn-outline-success">Add Shipping Address</a>
+                </div>
+            </div>
             <div class="row">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row text-success">
-                            Default Address
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row text-success">
+                                Default Address
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ default_add.name }}</h5>
-                        <p class="card-text">{{ default_add.contact_number }}</p>
-                        <p class="card-text">{{ default_add.address_line_1}}; {{ default_add.address_line_2}}</p>
-                        <p class="card-text">{{ default_add.city}}, {{ default_add.state}}, {{ default_add.pincode}},
-                            {{ default_add.country.name}}</p>
-                        <a href="{% url 'edit_address' default_add.pk %}" class="">Edit</a>
-                        <a href="#" class="">Remove</a>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ default_add.name }}</h5>
+                            <p class="card-text">{{ default_add.contact_number }}</p>
+                            <p class="card-text">{{ default_add.address_line_1}}; {{ default_add.address_line_2}}</p>
+                            <p class="card-text">{{ default_add.city}}, {{ default_add.state}},
+                                {{ default_add.pincode}},
+                                {{ default_add.country.name}}</p>
+                            <a href="{% url 'edit_address' default_add.pk %}" class="">Edit</a>
+                        </div>
                     </div>
                 </div>
             </div>
             {% for address in other_add %}
-                <div class="row mt-2">
+            <div class="row mt-2">
+                <div class="col">
                     <div class="card">
                         <div class="card-header">
                             <div class="row text-secondary">
@@ -59,10 +69,12 @@
                             <p class="card-text">{{ address.city}}, {{ address.state}}, {{ address.pincode}},
                                 {{ address.country.name}}</p>
                             <a href="{% url 'edit_address' address.pk %}" class="">Edit</a>
-                            <a href="#" class="">Remove</a>
+                            <a href="{% url 'make_default_address' address.pk %}" class="mx-4">Make default address</a>
+                            <a href="{% url 'delete_address' address.pk %}" class="">Remove</a>
                         </div>
                     </div>
                 </div>
+            </div>
             {% endfor %}
         </div>
     </div>

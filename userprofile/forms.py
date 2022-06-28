@@ -85,46 +85,52 @@ class ProfileForm(forms.ModelForm):
         user.email = self.cleaned_data.get("email")
         user.first_name = self.cleaned_data.get("first_name")
         user.last_name = self.cleaned_data.get("last_name")
-        if self.cleaned_data.get("password") != "" or self.cleaned_data.get("password") is None:
+        print("Password is ", self.cleaned_data.get('password'), "current password ", user.password)
+        if self.cleaned_data.get("password") != "" or self.cleaned_data.get("password") is not None:
             print("HIT")
             user.set_password(self.cleaned_data.get("password"))
         user.save()
         return user
 
 
-class AddressForm(forms.ModelForm):
+class CreateAddressForm(forms.ModelForm):
     name = forms.CharField(label='Address Name',
         widget=forms.TextInput(
             attrs={
-                "class":"form-control my-2"
+                "class": "form-control my-2"
             }
         )
     )
     contact_number = forms.CharField(label='Contact Number',
         widget=forms.TextInput(
             attrs={
-                "class":"form-control my-2"
+                "class": "form-control my-2"
             }
         )
     )
+    address_type = forms.ChoiceField(label='Address Type:', required=True,
+        choices=ShippingAddress.TYPE_OF_ADDRESS,
+        widget=forms.RadioSelect
+    )
+
     address_line_1 = forms.CharField(label='Address Line 1',
         widget=forms.TextInput(
             attrs={
-                "class":"form-control my-2"
+                "class": "form-control my-2"
             }
         )
     )
     address_line_2 = forms.CharField(label='Address Line 2',
         widget=forms.TextInput(
             attrs={
-                "class":"form-control my-2"
+                "class": "form-control my-2"
             }
         )
     )
     city = forms.CharField(label='City Name',
         widget=forms.TextInput(
             attrs={
-                "class":"form-control my-2"
+                "class": "form-control my-2"
             }
         )
     )
@@ -143,13 +149,98 @@ class AddressForm(forms.ModelForm):
         )
     )
     country = CountryField(blank_label='(Select Country)').formfield(
-        widget=CountrySelectWidget
-    )
-    default = forms.BooleanField(label='Make Default Address?',
-        required=False,
-        widget=forms.CheckboxInput(
+        widget=CountrySelectWidget(
             attrs={
-                "class": "form-check"
+                "class": "form-select my-2" 
+            }
+        )
+    )
+
+    class Meta:
+        model = ShippingAddress
+        fields = [
+            'name',
+            'contact_number',
+            'address_type',
+            'address_line_1',
+            'address_line_2',
+            'city',
+            'state',
+            'pincode',
+            'country',
+        ]
+
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        address = ShippingAddress.objects.create(user=user)
+        address.name = self.cleaned_data.get("name")
+        address.contact_number = self.cleaned_data.get("contact_number")
+        address.address_type = self.cleaned_data.get("address_type")
+        address.address_line_1 = self.cleaned_data.get('address_line_1')
+        address.address_line_2 = self.cleaned_data.get('address_line_2')
+        address.city = self.cleaned_data.get('city')
+        address.state = self.cleaned_data.get('state')
+        address.pincode = self.cleaned_data.get('pincode')
+        address.country = self.cleaned_data.get('country')
+        address.save()
+        return user
+
+
+class EditAddressForm(forms.ModelForm):
+    name = forms.CharField(label='Address Name',
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control my-2"
+            }
+        )
+    )
+    contact_number = forms.CharField(label='Contact Number',
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control my-2"
+            }
+        )
+    )
+    address_line_1 = forms.CharField(label='Address Line 1',
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control my-2"
+            }
+        )
+    )
+    address_line_2 = forms.CharField(label='Address Line 2',
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control my-2"
+            }
+        )
+    )
+    city = forms.CharField(label='City Name',
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control my-2"
+            }
+        )
+    )
+    state = forms.CharField(label='State Name',
+        widget=forms.TextInput(
+            attrs={
+                "class":"form-control my-2"
+            }
+        )
+    )
+    pincode = forms.CharField(label='Pincode',
+        widget=forms.TextInput(
+            attrs={
+                "class":"form-control my-2"
+            }
+        )
+    )
+    country = CountryField(blank_label='(Select Country)').formfield(
+        widget=CountrySelectWidget(
+            attrs={
+                "class": "form-select my-2" 
             }
         )
     )
@@ -165,5 +256,4 @@ class AddressForm(forms.ModelForm):
             'state',
             'pincode',
             'country',
-            'default',
         ]

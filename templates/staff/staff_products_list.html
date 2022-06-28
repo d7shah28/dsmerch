@@ -18,12 +18,15 @@
             {% for obj in object_list %}
             <tr>
                 <td>{{ obj.name }}</td>
-                <td>{{ obj.category }}</td>
-                <td>{{ obj.price }}</td>
+                <td>{{ obj.get_category_display }}</td>
+                <td>Rs. {{ obj.price }}</td>
                 <td>{{ obj.count_in_stock }}</td>
                 <td>{{ obj.user }}</td>
                 <td>{{ obj.num_reviews }}</td>
-                <td><button><i class="fa fa-pencil-square-o"></i></button></td>
+                <td>
+                    <a class="btn btn-sm btn-light mr-auto"><i class="fa fa-pencil"></i></a>
+                    <a class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
