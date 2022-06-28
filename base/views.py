@@ -1,13 +1,18 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib import messages
 
-from .forms import RegisterForm, LoginForm, DivErrorList
+from .forms import (
+    RegisterForm, 
+    LoginForm, 
+    DivErrorList, 
+    CreateProductForm,
+    EditProductForm
+)
+
 from .models import Product
 
-def test_page(request):
-
-    return render(request, 'base.html', {})
 
 def register(request):
 
@@ -93,5 +98,53 @@ def staff_products_list(request):
 
 
 # CARD-BODY REDUCE PADDING
-# STYLING OF EDIT ADDRESS PAGE
-# Update Password change
+
+def create_product(request):
+    user = request.user
+    if request.method == 'POST':
+        form_class = CreateProductForm(request.POST or request.FILES, error_class=DivErrorList, instance=user)
+        if form_class.is_valid():
+            product = Product.objects.create(user=user)
+            product.name = form_class.cleaned_data.get("name")
+            if 'image' in request.FILES:
+                product.image = request.FILES['image']
+            product.brand = form_class.cleaned_data.get("brand")
+            product.category = form_class.cleaned_data.get("category")
+            product.description = form_class.cleaned_data.get("description")
+            product.price = form_class.cleaned_data.get("price")
+            product.count_in_stock = form_class.cleaned_data.get("count_in_stock")
+            product.save()
+            messages.success(request, f'Created new product')
+            return redirect('staff-products-view')
+        else:
+            messages.error(request, f'Fix error below')
+    else:
+        form_class = CreateProductForm(error_class=DivErrorList, instance=user)
+    context = {
+        'form': form_class
+    }
+
+    return render(request, 'staff/create_product.html', context)
+
+def edit_product(request, pk):
+    user = request.user
+    product = Product.objects.get(pk=pk)
+    if request.method == 'POST':
+        form_class = EditProductForm(request.POST or request.FILES, error_class=DivErrorList, instance=product)
+        if form_class.is_valid():
+            obj = form_class.save()
+            if 'image' in request.FILES:
+                obj.image = request.FILES['image']
+                obj.save()
+            messages.success(request, f'Updated product')
+            return redirect('staff-products-view')
+        else:
+            messages.error(request, f'Fix error below')
+    else:
+        form_class = EditProductForm(error_class=DivErrorList, instance=product)
+    context = {
+        'form': form_class,
+        'obj': product
+    }
+
+    return render(request, 'staff/edit_product.html', context)

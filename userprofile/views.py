@@ -1,4 +1,3 @@
-from email import message
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
@@ -89,12 +88,11 @@ def edit_address(request, pk):
     if request.method == 'POST':
         form_class = EditAddressForm(request.POST, error_class=DivErrorList, instance=address)
         if form_class.is_valid():
-            print("VALID")
             form_class.save()
             messages.success(request, f'Successfully Updated Your Address')
             return redirect('edit_address')
         else:
-            print("NOT VALID")
+            messages.error(request, f'UnSuccessfully UnUpdated Your Address')
     else:
         form_class=EditAddressForm(error_class=DivErrorList, instance=address)
 

@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -17,11 +18,9 @@ class Product(models.Model):
         (COMICS, 'Comics'),
     ]
 
-
-    # category/description/rating/number of reviews/Price/Num left in stock/created at/ID
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     name = models.CharField(_('Product Name'), max_length=100, blank=True)
-    image = models.ImageField(_('Product Image'), null=True, blank=True, upload_to="images")
+    image = models.ImageField(_('Product Image'), null=True, blank=True, upload_to="images", default="images/default_img.png")
     brand = models.CharField(_('Brand Name'), max_length=100, blank=True)
     category = models.CharField(_('Product Type/Category'), max_length=100, choices=TYPE_OF_PRODUCT, blank=True)
     description = models.TextField(_('Product Description'), blank=True)

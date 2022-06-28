@@ -1,5 +1,9 @@
+from urllib import request
 from django import forms
 from django.forms.utils import ErrorList
+from django.db import transaction
+
+from base.models import Product
 
 
 class DivErrorList(ErrorList):
@@ -77,3 +81,139 @@ class LoginForm(forms.Form):
             }
         )
     )
+
+
+class CreateProductForm(forms.ModelForm):
+    name = forms.CharField(label='Product Name',
+        widget=forms.TextInput(
+            attrs={
+                "class":"form-control my-2",
+                "placeholder":"Enter Product Name"
+            }
+        )
+    )
+
+    image = forms.ImageField(label="Product Image",
+        required=False, 
+        help_text="Upload Image",
+        widget=forms.FileInput(
+            attrs={
+                "class": "form-control my-2"
+            }
+        )
+    )
+
+    brand = forms.CharField(label='Brand Name',
+        widget=forms.TextInput(
+            attrs={
+                "class":"form-control my-2",
+                "placeholder":"Enter Brand Name"
+            }
+        )
+    )
+
+    category = forms.ChoiceField(label='Product Category',
+        choices=Product.TYPE_OF_PRODUCT,
+        widget=forms.RadioSelect
+    )
+
+    description = forms.CharField(label='Product Description',
+        widget=forms.Textarea(
+            attrs={
+                "class":"form-control my-2"
+            }
+        )
+    )
+
+    price = forms.DecimalField(label='Product Price',
+        max_digits=7, decimal_places=2
+    )
+
+    count_in_stock = forms.CharField(label='Count in Stock',
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control my-2"
+            }
+        )
+    )
+
+    class Meta:
+        model = Product
+        fields = [
+            'name',
+            'image',
+            'brand',
+            'category',
+            'description',
+            'price',
+            'count_in_stock',
+        ]
+
+
+class EditProductForm(forms.ModelForm):
+    name = forms.CharField(label='Product Name',
+        widget=forms.TextInput(
+            attrs={
+                "class":"form-control my-2",
+                "placeholder":"Enter Product Name"
+            }
+        )
+    )
+
+    image = forms.ImageField(label="Product Image",
+        required=False, 
+        help_text="Upload Image",
+        widget=forms.FileInput(
+            attrs={
+                "class": "form-control my-2"
+            }
+        )
+    )
+
+    brand = forms.CharField(label='Brand Name',
+        widget=forms.TextInput(
+            attrs={
+                "class":"form-control my-2",
+                "placeholder":"Enter Brand Name"
+            }
+        )
+    )
+
+    category = forms.ChoiceField(label='Product Category',
+        choices=Product.TYPE_OF_PRODUCT,
+        widget=forms.RadioSelect
+    )
+
+    description = forms.CharField(label='Product Description',
+        widget=forms.Textarea(
+            attrs={
+                "class":"form-control my-2"
+            }
+        )
+    )
+
+    price = forms.DecimalField(label='Product Price',
+        max_digits=7, decimal_places=2
+    )
+
+    count_in_stock = forms.CharField(label='Count in Stock',
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control my-2"
+            }
+        )
+    )
+
+    class Meta:
+        model = Product
+        fields = [
+            'name',
+            'image',
+            'brand',
+            'category',
+            'description',
+            'price',
+            'count_in_stock',
+        ]
+
+

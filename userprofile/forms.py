@@ -42,14 +42,6 @@ class ProfileForm(forms.ModelForm):
             'last_name',
         ]
 
-    def clean(self):
-        data = self.cleaned_data
-        password = self.cleaned_data.get("password")
-        password2 = self.cleaned_data.get("password2")
-        if password2 != password:
-            raise forms.ValidationError("Password should match.")
-        return data
-
     @transaction.atomic
     def save(self):
         user = super().save(commit=False)
