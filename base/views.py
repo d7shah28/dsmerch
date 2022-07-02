@@ -12,6 +12,7 @@ from .forms import (
 )
 
 from .models import Product
+from userprofile.models import ShippingAddress
 
 
 def register(request):
@@ -71,6 +72,7 @@ def logout_page(request):
 
 
 def products_list(request):
+    print(request.session.get("first_name", "Unknown"))
     queryset = Product.objects.all()
     context = {
         'object_list': queryset
@@ -89,62 +91,97 @@ def product_detail(request, pk):
     return render(request, 'pages/product_detail.html', context)
 
 
+# CARD-BODY REDUCE PADDING
+# STAFF VIEWS
 def staff_products_list(request):
-    queryset = Product.objects.all()
-    context = {
-        'object_list': queryset
+    if request.user.is_staff == True:
+        queryset = Product.objects.all()
+        context = {
+            'object_list': queryset
     }
+    else:
+        return redirect('home')
     return render(request, 'staff/staff_products_list.html', context)
 
 
-# CARD-BODY REDUCE PADDING
-
 def create_product(request):
-    user = request.user
-    if request.method == 'POST':
-        form_class = CreateProductForm(request.POST or request.FILES, error_class=DivErrorList, instance=user)
-        if form_class.is_valid():
-            product = Product.objects.create(user=user)
-            product.name = form_class.cleaned_data.get("name")
-            if 'image' in request.FILES:
-                product.image = request.FILES['image']
-            product.brand = form_class.cleaned_data.get("brand")
-            product.category = form_class.cleaned_data.get("category")
-            product.description = form_class.cleaned_data.get("description")
-            product.price = form_class.cleaned_data.get("price")
-            product.count_in_stock = form_class.cleaned_data.get("count_in_stock")
-            product.save()
-            messages.success(request, f'Created new product')
-            return redirect('staff-products-view')
+    if request.user.is_staff == True:
+        user = request.user
+        if request.method == 'POST':
+            form_class = CreateProductForm(request.POST or request.FILES, error_class=DivErrorList, instance=user)
+            if form_class.is_valid():
+                product = Product.objects.create(user=user)
+                product.name = form_class.cleaned_data.get("name")
+                if 'image' in request.FILES:
+                    product.image = request.FILES['image']
+                product.brand = form_class.cleaned_data.get("brand")
+                product.category = form_class.cleaned_data.get("category")
+                product.description = form_class.cleaned_data.get("description")
+                product.price = form_class.cleaned_data.get("price")
+                product.count_in_stock = form_class.cleaned_data.get("count_in_stock")
+                product.save()
+                messages.success(request, f'Created new product')
+                return redirect('staff-products-view')
+            else:
+                messages.error(request, f'Fix error below')
         else:
-            messages.error(request, f'Fix error below')
-    else:
-        form_class = CreateProductForm(error_class=DivErrorList, instance=user)
-    context = {
-        'form': form_class
+            form_class = CreateProductForm(error_class=DivErrorList, instance=user)
+        context = {
+            'form': form_class
     }
+    else:
+        return redirect('home')
 
     return render(request, 'staff/create_product.html', context)
 
 def edit_product(request, pk):
-    user = request.user
-    product = Product.objects.get(pk=pk)
-    if request.method == 'POST':
-        form_class = EditProductForm(request.POST or request.FILES, error_class=DivErrorList, instance=product)
-        if form_class.is_valid():
-            obj = form_class.save()
-            if 'image' in request.FILES:
-                obj.image = request.FILES['image']
-                obj.save()
-            messages.success(request, f'Updated product')
-            return redirect('staff-products-view')
+    if request.user.is_staff == True:
+        user = request.user
+        product = Product.objects.get(pk=pk)
+        if request.method == 'POST':
+            form_class = EditProductForm(request.POST or request.FILES, error_class=DivErrorList, instance=product)
+            if form_class.is_valid():
+                obj = form_class.save()
+                if 'image' in request.FILES:
+                    obj.image = request.FILES['image']
+                    obj.save()
+                messages.success(request, f'Updated product')
+                return redirect('staff-products-view')
+            else:
+                messages.error(request, f'Fix error below')
         else:
-            messages.error(request, f'Fix error below')
-    else:
-        form_class = EditProductForm(error_class=DivErrorList, instance=product)
-    context = {
-        'form': form_class,
-        'obj': product
+            form_class = EditProductForm(error_class=DivErrorList, instance=product)
+        context = {
+            'form': form_class,
+            'obj': product
     }
+    else:
+        return redirect('home')
 
     return render(request, 'staff/edit_product.html', context)
+
+
+def staff_users_list(request):
+    if request.user.is_staff == True:
+        queryset = User.objects.filter(is_staff=False)
+        context = {
+            'object_list': queryset
+        }
+    else:
+        return redirect('home')
+    return render(request, 'staff/staff_users_list.html', context)
+
+
+def staff_show_user_detail(request, pk):
+    if request.user.is_staff == True:
+        user = User.objects.get(pk=pk)
+        user_addresses = ShippingAddress.objects.filter(user=user, default=False)
+        user_default_address = ShippingAddress.objects.get(user=user, default=True)
+        context = {
+            'user': user,
+            'addresses': user_addresses,
+            'default_address': user_default_address
+        }
+    else:
+        return redirect('home')
+    return render(request, 'staff/show_user_details.html', context)

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig',
     'reviews.apps.ReviewsConfig',
     'userprofile.apps.UserprofileConfig',
+    'cart.apps.CartConfig',
 ]
 
 MIDDLEWARE = [
