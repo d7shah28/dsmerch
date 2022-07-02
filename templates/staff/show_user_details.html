@@ -2,17 +2,18 @@
 
 {% block content %}
 <div class="row m-2">
-    <h2>{{ user.username }} details</h2>
+    <h2>{{ user_detail.username }} details</h2>
     <div class="row mt-2">
         <div class="col">
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">Email: {{ user.email }}</li>
-                <li class="list-group-item">First Name: {{ user.first_name }}</li>
-                <li class="list-group-item">Last Name: {{ user.last_name }}</li>
+                <li class="list-group-item">Email: {{ user_detail.email }}</li>
+                <li class="list-group-item">First Name: {{ user_detail.first_name }}</li>
+                <li class="list-group-item">Last Name: {{ user_detail.last_name }}</li>
               </ul>
         </div>
         <div class="col">
             Addresses:
+            {% if default_address %}
             <div class="row">
                 <div class="col">
                     <div class="card">
@@ -32,6 +33,10 @@
                     </div>
                 </div>
             </div>
+            {% else %}
+            No addresses detected
+            {% endif %}
+            {% if addresses %}
             {% for address in addresses %}
             <div class="row mt-2">
                 <div class="col">
@@ -52,6 +57,7 @@
                 </div>
             </div>
             {% endfor %}
+            {% endif %}
         </div>
     </div>
 </div>

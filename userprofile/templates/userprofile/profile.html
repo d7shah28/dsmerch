@@ -37,6 +37,7 @@
                     <a href="{% url 'create_address' %}" class="btn btn-outline-success">Add Shipping Address</a>
                 </div>
             </div>
+            {% if default_add %}
             <div class="row">
                 <div class="col">
                     <div class="card">
@@ -57,6 +58,8 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
+            {% if other_add %}
             {% for address in other_add %}
             <div class="row mt-2">
                 <div class="col">
@@ -80,6 +83,7 @@
                 </div>
             </div>
             {% endfor %}
+            {% endif %}
         </div>
     </div>
 </div>

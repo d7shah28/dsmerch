@@ -17,8 +17,13 @@ def profile_page(request):
     user = request.user
     print(f"Current user {user}")
     addresses = ShippingAddress.objects.filter(user=user)
-    default_address = addresses.get(default=True)
-    other_addresses = addresses.filter(default=False)
+    print(addresses)
+    default_address = None
+    other_addresses = None
+    if addresses.count() >= 1:
+        default_address = addresses.get(default=True)
+        other_addresses = addresses.filter(default=False)
+    
 
     if request.method == 'POST':
         u_form = ProfileForm(request.POST, error_class=DivErrorList, instance=user)

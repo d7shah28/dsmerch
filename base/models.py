@@ -1,6 +1,6 @@
-from email.policy import default
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse
 
 from django.contrib.auth.models import User
 
@@ -30,6 +30,9 @@ class Product(models.Model):
     count_in_stock = models.IntegerField(_('Count in stock'), default=0, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     _id = models.AutoField(primary_key=True, editable=False)
+
+    def get_absolute_url(self):
+        return reverse("product_detail", kwargs={"pk": self.pk})
 
     def __str__(self) -> str:
         return self.name

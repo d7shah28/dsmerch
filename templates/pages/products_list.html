@@ -7,7 +7,7 @@
         {% for prod in object_list %}
         <div class="col-md-3 my-3">
             <div class="card" style="width: 18rem;">
-                <a href="{% url 'product' prod.pk %}" alt="">
+                <a href="{% url 'product_detail' prod.pk %}" alt="">
                     <img src={{ prod.image.url }} class="rounded card-img" alt="a picture of {{ prod.name }}">
                 </a>
                 <hr>

@@ -1,3 +1,4 @@
+from email.policy import default
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -91,7 +92,6 @@ def product_detail(request, pk):
     return render(request, 'pages/product_detail.html', context)
 
 
-# CARD-BODY REDUCE PADDING
 # STAFF VIEWS
 def staff_products_list(request):
     if request.user.is_staff == True:
@@ -175,13 +175,24 @@ def staff_users_list(request):
 def staff_show_user_detail(request, pk):
     if request.user.is_staff == True:
         user = User.objects.get(pk=pk)
-        user_addresses = ShippingAddress.objects.filter(user=user, default=False)
-        user_default_address = ShippingAddress.objects.get(user=user, default=True)
+        addresses = ShippingAddress.objects.filter(user=user)
+        user_default_address = None
+        user_addresses = None
+        if addresses.count() >= 1:
+            user_default_address = addresses.get(default=True)
+            user_addresses = addresses.filter(default=False)
         context = {
-            'user': user,
+            'user_detail': user,
             'addresses': user_addresses,
             'default_address': user_default_address
         }
     else:
         return redirect('home')
+
     return render(request, 'staff/show_user_details.html', context)
+
+
+# CARD-BODY REDUCE PADDING
+# CART ADD TO CART FUNC 
+# CHECKOUT PROCESS
+# REVIEW
