@@ -36,7 +36,7 @@
                     </li>
                     {% if user.is_staff is False %}
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="{% url 'cart_home' %}">Cart</a>
+                        <a class="nav-link text-white" href="{% url 'cart_home' %}">{{ request.session.cart_items }} <i class="fa fa-shopping-cart"></i></a>
                     </li>
                     {% endif %}
                     {% if user.is_staff is True %}

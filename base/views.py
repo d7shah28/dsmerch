@@ -14,6 +14,7 @@ from .forms import (
 
 from .models import Product
 from userprofile.models import ShippingAddress
+from cart.models import Cart
 
 
 def register(request):
@@ -84,11 +85,12 @@ def products_list(request):
 def product_detail(request, pk):
     product = Product.objects.get(_id=pk)
     countInStock = range(1, product.count_in_stock + 1)
+    cart_obj, cart_created = Cart.objects.new_or_get(request)
     context = {
         "object": product,
         "countInStock": countInStock
     }
-
+    context["cart"] = cart_obj
     return render(request, 'pages/product_detail.html', context)
 
 

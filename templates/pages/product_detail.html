@@ -35,7 +35,7 @@
                     </div>
                 </li>
                 <li class="list-group-item d-grid gap-2">
-                    <button class="btn btn-success">Add to Cart</button>
+                    {% include 'cart/update_cart.html' with product=object cart=cart %}
                 </li>
             </ul>
         </div>
