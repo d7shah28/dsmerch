@@ -48,9 +48,9 @@ class Order(models.Model):
 
     def update_total(self):
         cart_total = self.cart.total
-        tax_money = self.tax_price/100.00 * float(cart_total)
+        tax_money = float(self.tax_price)/100.00 * float(cart_total)
         shipping_total = self.shipping_price
-        refresh_total = math.fsum([cart_total, shipping_total, tax_money])
+        refresh_total = format(math.fsum([cart_total, shipping_total, tax_money]), '.2f') 
         self.total_price = refresh_total
         self.save()
         return refresh_total

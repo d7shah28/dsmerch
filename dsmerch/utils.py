@@ -8,7 +8,7 @@ def random_string_generator(size=12, chars=string.ascii_lowercase + string.digit
 
 
 def unique_order_id_generator(instance):
-    new_order_id = random_string_generator()
+    new_order_id = random_string_generator(chars=string.digits)
 
     Klass = instance.__class__
     qs_exists = Klass.objects.filter(order_id=new_order_id).exists()

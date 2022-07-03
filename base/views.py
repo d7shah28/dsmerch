@@ -1,8 +1,8 @@
-from email.policy import default
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.utils.http import is_safe_url
 
 from .forms import (
     RegisterForm, 
@@ -25,9 +25,7 @@ def register(request):
             username = form_class.cleaned_data.get('username')
             email = form_class.cleaned_data.get('email')
             password = form_class.cleaned_data.get('password')
-
             user = User.objects.create_user(username, email, password)
-            print("New user created:", user)
             if user:
                 return redirect('login')
         else:
@@ -43,6 +41,9 @@ def register(request):
 
 
 def login_page(request):
+    next_ = request.GET.get("next")
+    next_post = request.POST.get("next")
+    redirect_path = next_ or next_post or None
 
     if request.method == 'POST':
         form_class = LoginForm(request.POST or None, error_class=DivErrorList)
@@ -54,7 +55,10 @@ def login_page(request):
             user = authenticate(username=username, email=email, password=password)
             if user:
                 login(request, user)
-                return redirect('/')
+                if is_safe_url(redirect_path, request.get_host()):
+                    return redirect(redirect_path)
+                else:
+                    return redirect('/')
         else:
             print("ERROR")
     else:
@@ -68,7 +72,6 @@ def login_page(request):
 def logout_page(request):
     user = request.user
     if user:
-        print("HI") 
         logout(request)
         return redirect('/')
 
@@ -195,6 +198,5 @@ def staff_show_user_detail(request, pk):
 
 
 # CARD-BODY REDUCE PADDING
-# CART ADD TO CART FUNC 
 # CHECKOUT PROCESS
 # REVIEW

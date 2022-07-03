@@ -32,7 +32,7 @@ def cart_update(request):
     return redirect('cart_home')
 
 def checkout_page(request):
-    cart_obj, cart_created =  Cart.objects.new_or_get(request)
+    cart_obj, cart_created = Cart.objects.new_or_get(request)
     order_obj = None
     if cart_created or cart_obj.products.count() == 0:
         return redirect("cart_home")

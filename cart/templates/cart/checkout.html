@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<h1>CHECKOUT</h1>
-<p> Cart total: {{ object.cart.total }}</p>
-<p>Shipping Price: {{ object.shipping_price }}</p>
-<p>Total Price: {{ object.total_price }}</p>
+{% block content %}'
+<div class="container">
+    <h1>CHECKOUT</h1>
+    <p> Cart total: {{ object.cart.total }}</p>
+    <p>Shipping Price: {{ object.shipping_price }}</p>
+    <p>Total Price: {{ object.total_price }}</p>
+</div>
 {% endblock content %}
