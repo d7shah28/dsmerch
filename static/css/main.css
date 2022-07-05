@@ -38,3 +38,13 @@ hr {
     max-height: auto;
     object-fit: contain;
 }
+
+
+.lead {
+    font-weight: 400;
+}
+
+.cart-card-head {
+    background-color: #3C3C3C;
+    color: white;
+}

@@ -34,7 +34,8 @@ class Order(models.Model):
     order_id = models.CharField(_("Order ID"), max_length=120, blank=True)
     cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True)
     delivery_status = models.CharField(_('Delivery Status'), max_length=30, choices=TYPE_OF_DELIVERY_STATUS, blank=True)
-    tax_price = models.DecimalField(_('Tax'),default=18.00,  max_digits=10, decimal_places=2, null=True, blank=True)
+    tax_percent = models.DecimalField(_('Tax Percent'), default=18.00,  max_digits=10, decimal_places=2, null=True, blank=True)
+    tax_price = models.DecimalField(_('Tax Price'), default=0.00, max_digits=10, decimal_places=2, null=True, blank=True)
     shipping_price = models.DecimalField(_('Shipping Price'), default=50.00, max_digits=10, decimal_places=2, null=True, blank=True)
     total_price = models.DecimalField(_(' Total Price'), max_digits=30, decimal_places=2, null=True, blank=True)
     is_paid = models.BooleanField(_('Paid?'), default=False, null=True, blank=True)
@@ -48,7 +49,8 @@ class Order(models.Model):
 
     def update_total(self):
         cart_total = self.cart.total
-        tax_money = float(self.tax_price)/100.00 * float(cart_total)
+        tax_money = float(self.tax_percent)/100.00 * float(cart_total)
+        self.tax_price = tax_money
         shipping_total = self.shipping_price
         refresh_total = format(math.fsum([cart_total, shipping_total, tax_money]), '.2f') 
         self.total_price = refresh_total

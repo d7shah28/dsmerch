@@ -1,8 +1,7 @@
-from doctest import BLANKLINE_MARKER
 from django.db import models
 from django.core.validators import RegexValidator
 from django_countries.fields import CountryField
-
+from django.db.models.signals import pre_save
 
 from django.utils.translation import gettext_lazy as _
 
@@ -40,5 +39,11 @@ class ShippingAddress(models.Model):
     def __str__(self) -> str:
         return self.name
 
+
+def pre_save_default_address(sender, instance, *args, **kwargs):
+    if ShippingAddress.objects.filter(user=instance.user).count() == 0:
+        instance.default = True
+
+pre_save.connect(pre_save_default_address, sender=ShippingAddress)
 
 

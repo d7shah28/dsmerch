@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
+from django.utils.http import is_safe_url
 
 from .forms import (
     ProfileForm, 
@@ -68,6 +69,10 @@ def change_password(request):
 @login_required
 def create_address(request):
     user = request.user
+    next_ = request.GET.get('from_ship_next')
+    next_post = request.POST.get('from_ship_next')
+    redirect_path = next_ or next_post or None
+
     if request.method == 'POST':
         form_class = CreateAddressForm(request.POST or None, error_class=DivErrorList, instance=user)
         if form_class.is_valid():
@@ -76,7 +81,10 @@ def create_address(request):
             # obj.save()
             print(f"obj {obj}")
             messages.success(request, f"Successfully created new address")
-            return redirect('profile')
+            if is_safe_url(redirect_path, request.get_host()):
+                return redirect(redirect_path)
+            else:
+                return redirect('profile')
     else:
         form_class = CreateAddressForm(error_class=DivErrorList, instance=user)
 

@@ -1,0 +1,11 @@
+<form method='POST' action="{% url 'create_address' %}">
+    {% csrf_token %}
+    {% if next_url %}
+    <input type="hidden" name="from_ship_next" value="{{ next_url }}">
+    {% endif %}
+    {{ ship_form }}
+    <br>
+    <div class="text-center">
+        <button class="btn btn-outline-success" type="submit">Add</button>
+    </div>
+</form>

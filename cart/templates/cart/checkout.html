@@ -1,10 +1,168 @@
 {% extends 'base.html' %}
 
-{% block content %}'
-<div class="container">
-    <h1>CHECKOUT</h1>
-    <p> Cart total: {{ object.cart.total }}</p>
-    <p>Shipping Price: {{ object.shipping_price }}</p>
-    <p>Total Price: {{ object.total_price }}</p>
+{% block content %}
+<div class="">
+    {% if not user.is_authenticated %}
+    <div class="row m-2">
+        <div class="col-12 col-md-6">
+            <h2>Login</h2>
+            {% include 'cart/snippets/login_form.html' with form=form_obj next_url=request.build_absolute_uri %}
+        </div>
+    </div>
+    {% else %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    <h1 class="text-center">CHECKOUT</h1>
+    {% if not default_add %}
+    <div class="row m-3">
+        <div class="col-12 col-md-7">
+            NO address found
+            {% include 'cart/snippets/add_address.html' with ship_form=shipping_obj next_url=request.build_absolute_uri %}
+        </div>
+        <div class="col-12 col-md-5">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header cart-card-head">
+                            <h2>Your Total</h2>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col">
+                                            Cart total:
+                                        </div>
+                                        <div class="col">
+                                            <span class="lead">₹{{ object.cart.total }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col">
+                                            Tax:
+                                        </div>
+                                        <div class="col">
+                                            <span class="lead">₹{{ object.tax_price }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col">
+                                            Shipping charges:
+                                        </div>
+                                        <div class="col">
+                                            <span class="lead">₹{{ object.shipping_price }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col">
+                                            Total:
+                                        </div>
+                                        <div class="col">
+                                            <span class="lead">₹{{ object.total_price }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <button class="btn btn-warning">Place Order</button>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="row m-3">
+        <div class="col-12 col-md-8">
+            {% if default_add %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault" checked>
+                <label class="form-check-label" for="flexRadioDefault1">
+                    {{ default_add.name }}, {{ default_add.contact_number }}, {{ default_add.address_line_1 }}
+                </label>
+            </div>
+            {% endif %}
+            {% if add %}
+            {% for add in other_add %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                    id="flexRadio{{ forloop.counter }}">
+                <label class="form-check-label" for="flexRadioDefault1">
+                    {{ add.name }}, {{ add.contact_number }}, {{ add.address_line_1 }}
+                </label>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header cart-card-head">
+                            <h2>Your Total</h2>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col">
+                                            Cart total:
+                                        </div>
+                                        <div class="col">
+                                            <span class="lead">₹{{ object.cart.total }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col">
+                                            Tax:
+                                        </div>
+                                        <div class="col">
+                                            <span class="lead">₹{{ object.tax_price }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col">
+                                            Shipping charges:
+                                        </div>
+                                        <div class="col">
+                                            <span class="lead">₹{{ object.shipping_price }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col">
+                                            Total:
+                                        </div>
+                                        <div class="col">
+                                            <span class="lead">₹{{ object.total_price }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <button class="btn btn-warning">Place Order</button>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
 </div>
 {% endblock content %}
