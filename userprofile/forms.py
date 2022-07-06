@@ -67,10 +67,10 @@ class CreateAddressForm(forms.ModelForm):
             }
         )
     )
-    address_type = forms.ChoiceField(label='Address Type:', required=True,
-        choices=ShippingAddress.TYPE_OF_ADDRESS,
-        widget=forms.RadioSelect
-    )
+    # address_type = forms.ChoiceField(label='Address Type:', required=True,
+    #     choices=ShippingAddress.TYPE_OF_ADDRESS,
+    #     widget=forms.RadioSelect
+    # )
 
     address_line_1 = forms.CharField(label='Address Line 1',
         widget=forms.TextInput(
@@ -79,7 +79,7 @@ class CreateAddressForm(forms.ModelForm):
             }
         )
     )
-    address_line_2 = forms.CharField(label='Address Line 2',
+    address_line_2 = forms.CharField(label='Address Line 2', required=False,
         widget=forms.TextInput(
             attrs={
                 "class": "form-control my-2"
@@ -120,7 +120,7 @@ class CreateAddressForm(forms.ModelForm):
         fields = [
             'name',
             'contact_number',
-            'address_type',
+            # 'address_type',
             'address_line_1',
             'address_line_2',
             'city',
@@ -130,12 +130,12 @@ class CreateAddressForm(forms.ModelForm):
         ]
 
     @transaction.atomic
-    def save(self):
+    def save(self, commit=False):
         user = super().save(commit=False)
         address = ShippingAddress.objects.create(user=user)
         address.name = self.cleaned_data.get("name")
         address.contact_number = self.cleaned_data.get("contact_number")
-        address.address_type = self.cleaned_data.get("address_type")
+        # address.address_type = self.cleaned_data.get("address_type")
         address.address_line_1 = self.cleaned_data.get('address_line_1')
         address.address_line_2 = self.cleaned_data.get('address_line_2')
         address.city = self.cleaned_data.get('city')
@@ -143,7 +143,7 @@ class CreateAddressForm(forms.ModelForm):
         address.pincode = self.cleaned_data.get('pincode')
         address.country = self.cleaned_data.get('country')
         address.save()
-        return user
+        return address
 
 
 class EditAddressForm(forms.ModelForm):

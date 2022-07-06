@@ -77,9 +77,10 @@ def create_address(request):
         form_class = CreateAddressForm(request.POST or None, error_class=DivErrorList, instance=user)
         if form_class.is_valid():
             print(form_class.__dict__)
-            obj = form_class.save()
-            # obj.save()
-            print(f"obj {obj}")
+            obj = form_class.save(commit=False)
+            obj.address_type = request.POST.get("address_type", "SHIPPING")
+            obj.save()
+            print(f"obj {obj.address_line_1}")
             messages.success(request, f"Successfully created new address")
             if is_safe_url(redirect_path, request.get_host()):
                 return redirect(redirect_path)
