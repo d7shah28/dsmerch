@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('base.urls')),
     path('profile/', include('userprofile.urls')),
+    path('reviews/', include('reviews.urls')),
     path('api/cart/', cart_detail_api, name="api-cart"),
     path('cart/', include('cart.urls')),
     path('orders/', include('orders.urls')),

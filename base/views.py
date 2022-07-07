@@ -12,8 +12,11 @@ from .forms import (
     EditProductForm
 )
 
+from reviews.forms import CreateReviewForm
+
 from .models import Product
 from userprofile.models import ShippingAddress
+from reviews.models import Review
 from cart.models import Cart
 
 
@@ -89,9 +92,14 @@ def product_detail(request, pk):
     product = Product.objects.get(_id=pk)
     countInStock = range(1, product.count_in_stock + 1)
     cart_obj, cart_created = Cart.objects.new_or_get(request)
+    review_form = CreateReviewForm(error_class=DivErrorList)
+    review_qs = None
+    review_qs = Review.objects.filter(product=product)
     context = {
         "object": product,
-        "countInStock": countInStock
+        "countInStock": countInStock,
+        "reviews": review_qs,
+        "review_form": review_form
     }
     context["cart"] = cart_obj
     return render(request, 'pages/product_detail.html', context)

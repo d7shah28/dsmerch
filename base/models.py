@@ -38,5 +38,3 @@ class Product(models.Model):
         return self.name
 
 
-# TODO ORDER_ITEM, REVIEWS, SHIPPING_ADDRESS
-    
