@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-
+from django.http import JsonResponse
 from base.models import Product
 from orders.models import Order
 from userprofile.models import ShippingAddress
@@ -17,8 +17,22 @@ def cart_home(request):
     return render(request, "cart/home.html", context)
 
 
+def cart_detail_api(request):
+    cart_obj, new_obj =  Cart.objects.new_or_get(request)
+    products = [{"id": item._id,
+                "url": item.get_absolute_url(), 
+                "name": item.name, 
+                "price": item.price, 
+                "img": item.image.url
+                } 
+                for item in cart_obj.products.all()] 
+    cart_data = {"products": products, "total": cart_obj.total}
+    return JsonResponse(cart_data)
+
+
 def cart_update(request):
     product_id = request.POST.get("product_id")
+
     if product_id is not None:
         try:
             product_obj = Product.objects.get(_id=product_id)
@@ -29,9 +43,20 @@ def cart_update(request):
         cart_obj, new_obj =  Cart.objects.new_or_get(request)
         if product_obj in cart_obj.products.all():
             cart_obj.products.remove(product_obj)
+            product_added = False
         else:
             cart_obj.products.add(product_obj)
+            product_added = True
         request.session["cart_items"] = cart_obj.products.count()
+
+        if request.is_ajax():
+            print("AJAX REQUEST")
+            json_data = {
+                "added": product_added,
+                "removed": not product_added,
+                "cartItemsCount": cart_obj.products.count() 
+            }
+            return JsonResponse(json_data)
 
     return redirect('cart_home')
 

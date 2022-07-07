@@ -18,10 +18,13 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
+from cart.views import cart_detail_api
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('base.urls')),
     path('profile/', include('userprofile.urls')),
+    path('api/cart/', cart_detail_api, name="api-cart"),
     path('cart/', include('cart.urls')),
     path('orders/', include('orders.urls')),
 ]
