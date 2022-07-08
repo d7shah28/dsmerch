@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 class Review(models.Model):
     """Reviews given by customers"""
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     name = models.CharField(_('Review Header'), max_length=200, blank=True)
     rating = models.DecimalField(_('Rating'), max_digits=5, decimal_places=2, null=True,blank=True)
     comments = models.TextField(_('Review Comment'), blank=True)

@@ -217,4 +217,4 @@ def staff_show_user_detail(request, pk):
     return render(request, 'staff/show_user_details.html', context)
 
 
-# CARD-BODY REDUCE PADDING
+

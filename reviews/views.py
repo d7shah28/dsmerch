@@ -22,13 +22,19 @@ def create_review_view(request):
             user = request.user
             product = Product.objects.get(_id=product_id)
             try:
-                review_obj = Review.objects.create(product=product, user=user)
-                review_obj.comments = request.POST.get("comments")
-                review_obj.save()
-                if is_safe_url(redirect_path, request.get_host()):
-                    return redirect(redirect_path)
+
+                if Review.objects.filter(product=product, user=user).count() == 1:
+                    messages.warning(request, f"You have already submitted review for this product")
+                    if is_safe_url(redirect_path, request.get_host()):
+                        return redirect(redirect_path)
+                else:
+                    review_obj = Review.objects.create(product=product, user=user)
+                    review_obj.comments = request.POST.get("comments")
+                    review_obj.save()
+                    if is_safe_url(redirect_path, request.get_host()):
+                        return redirect(redirect_path)
             except:
-                messages.error(request, f"You have already submitted a review for this product")
+                messages.error(request, f"Internal server issue")
                 if is_safe_url(redirect_path, request.get_host()):
                     return redirect(redirect_path)                
 
