@@ -39,21 +39,23 @@
                         <a class="nav-link text-white" href="{% url 'cart_home' %}"><span class='navbar-cart-count'>{{ request.session.cart_items }} </span> <i class="fa fa-shopping-cart"></i></a>
                     </li>
                     {% endif %}
-                    {% if user.is_staff is True %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Admin
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{% url 'staff_products_view' %}">Products</a></li>
-                                <li><a class="dropdown-item" href="{% url 'staff_users_view' %}">Users</a></li>
-                            </ul>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="{% url 'profile' %}">{{ user.username }}  <i class="fa fa-user" aria-hidden="true"></i></a>
-                        </li>
+                    {% if user.is_authenticated %}
+                        {% if user.is_staff is True %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Admin
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="{% url 'staff_products_view' %}">Products</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'staff_users_view' %}">Users</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="{% url 'profile' %}">{{ user.username }}  <i class="fa fa-user" aria-hidden="true"></i></a>
+                            </li>
+                        {% endif %}
                     {% endif %}
 
                 </ul>

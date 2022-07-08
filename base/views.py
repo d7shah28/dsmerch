@@ -134,7 +134,7 @@ def create_product(request):
                 product.count_in_stock = form_class.cleaned_data.get("count_in_stock")
                 product.save()
                 messages.success(request, f'Created new product')
-                return redirect('staff-products-view')
+                return redirect('staff_products_view')
             else:
                 messages.error(request, f'Fix error below')
         else:
@@ -159,7 +159,7 @@ def edit_product(request, pk):
                     obj.image = request.FILES['image']
                     obj.save()
                 messages.success(request, f'Updated product')
-                return redirect('staff-products-view')
+                return redirect('staff_products_view')
             else:
                 messages.error(request, f'Fix error below')
         else:
@@ -172,6 +172,18 @@ def edit_product(request, pk):
         return redirect('home')
 
     return render(request, 'staff/edit_product.html', context)
+
+
+def remove_product(request, pk):
+    user = request.user
+    if user.is_staff == True:
+        product = Product.objects.get(pk=pk)
+        product_name = product.name
+        product.delete()
+        messages.success(request, f'Deleted product {product_name}')
+        return redirect('staff_products_view')
+    else:
+        return redirect('home')
 
 
 def staff_users_list(request):
@@ -206,5 +218,3 @@ def staff_show_user_detail(request, pk):
 
 
 # CARD-BODY REDUCE PADDING
-# CHECKOUT PROCESS
-# REVIEW

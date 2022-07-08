@@ -68,7 +68,7 @@
                     <p>{{ review.comments }}</p>
                 </li>
                 {% endfor %}
-                {% if user.is_authenticated %}
+                {% if user.is_authenticated and not user.is_staff %}
                 <li class="list-group-item">
                     <h4>Write a review</h4>
                     {% include 'reviews/comment.html' with form=review_form product_id=object.pk next_url=request.build_absolute_uri %}

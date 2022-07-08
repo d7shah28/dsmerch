@@ -119,11 +119,11 @@ def edit_address(request, pk):
 @login_required
 def make_default_address(request, pk):
     user = request.user
-    curr_default_address = ShippingAddress.objects.get(default=True)
+    curr_default_address = ShippingAddress.objects.get(default=True, user=user)
     curr_default_address.default = False
     curr_default_address.save()
 
-    new_default_address = ShippingAddress.objects.get(pk=pk)
+    new_default_address = ShippingAddress.objects.get(pk=pk, user=user)
     new_default_address.default = True
     new_default_address.save()
     return redirect('profile')

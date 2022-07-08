@@ -40,7 +40,7 @@
                 <td>{{ obj.num_reviews }}</td>
                 <td>
                     <a class="btn btn-sm btn-light mx-2" href="{% url 'edit_product' obj.pk %}"><i class="fa fa-pencil"></i></a>
-                    <a class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
+                    <a class="btn btn-sm btn-danger" href="{% url 'remove_product' obj.pk %}"><i class="fa fa-trash"></i></a>
                 </td>
             </tr>
             {% endfor %}

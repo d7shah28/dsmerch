@@ -11,6 +11,7 @@ urlpatterns = [
     # STAFF FUNCTIONALITY URLS
     path('create-product/', views.create_product, name="create_product"),
     path('edit-product/<int:pk>/', views.edit_product, name="edit_product"),
+    path('remove-product/<int:pk>/', views.remove_product, name="remove_product"),
     path('staff/products/', views.staff_products_list, name='staff_products_view'),
     path('staff/users/', views.staff_users_list, name='staff_users_view'),
     path('staff/users/<int:pk>/', views.staff_show_user_detail, name='show_user_details'),
