@@ -62,6 +62,9 @@ def login_page(request):
                     return redirect(redirect_path)
                 else:
                     return redirect('/')
+            else:
+                messages.error(request, f"Wrong username or password. Please check again.")
+                
         else:
             print("ERROR")
     else:
